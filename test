@@ -4,37 +4,21 @@ pipeline{
     
     agent any
     
-    tools{
-        maven 'mymaven'
-    }
-    
     stages{
         
         // stage means a job to jenkins
         stage('Clone the repo')
         {
             steps{
-                git 'https://github.com/sheralkaren/DevOpsCodeDemo.git'
+                git 'https://github.com/sheralkaren/Grafanafile.git'
             }
         }
-        stage('Compile the code'){
+        
+          stage('run commands'){
             steps{
-                sh 'mvn compile'
-            }
-        }
-         stage('Review the code'){
-            steps{
-                sh 'mvn pmd:pmd'
-            }
-        }
-         stage('Test the code'){
-            steps{
-                sh 'mvn test'
-            }
-        }
-          stage('package the code'){
-            steps{
-                sh 'mvn package'
+                sh 'yum install -y https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-5.0.3-1.x86_64.rpm'
+                sh 'service grafana-server start'
+                sh '/sbin/chkconfig --add grafana-server'
             }
         }
     }
